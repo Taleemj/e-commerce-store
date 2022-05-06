@@ -1,6 +1,7 @@
 export default {
   name: "product",
   title: "Product",
+  type: "document",
   fields: [
     {
       name: "image",
@@ -33,6 +34,11 @@ export default {
     {
       name: "details",
       title: "Details",
+      type: "string",
+    },
+    {
+      name: "category",
+      title: "Category",
       type: "string",
     },
   ],
