@@ -24,7 +24,6 @@ const HeroBanner = ({ HeroBanner }) => {
           </div>
         </div>
       </div>
-      HeroBanner
     </div>
   );
 };
