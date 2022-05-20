@@ -16,7 +16,7 @@ const Cart = () => {
   const {
     totalPrice,
     totalQuantity,
-    cartItems,
+    storageItems,
     setShowCart,
     toggleCartQuantity,
     onRemove,
@@ -34,7 +34,7 @@ const Cart = () => {
           <span className="heading">Your Cart</span>
           <span className="cart-num-items">({totalQuantity})</span>
         </button>
-        {cartItems.length < 1 && (
+        {storageItems.length < 1 && (
           <div className="empty-cart">
             <AiOutlineShopping size={150} />
             <h3>Your Shopping bag is empty</h3>
@@ -51,8 +51,8 @@ const Cart = () => {
         )}
 
         <div className="product-container">
-          {cartItems.length >= 1 &&
-            cartItems.map((item, i) => (
+          {storageItems.length >= 1 &&
+            storageItems.map((item, i) => (
               <div className="product" key={item?.id}>
                 <img
                   src={UrlFor(item?.image[0])}
@@ -94,7 +94,7 @@ const Cart = () => {
               </div>
             ))}
         </div>
-        {cartItems.length >= 1 && (
+        {storageItems.length >= 1 && (
           <div className="cart-bottom">
             <div className="total">
               <h3>SubTotal</h3>

@@ -6,6 +6,7 @@ export const Context = createContext();
 export const StateContext = ({ children }) => {
   const [showCart, setShowCart] = useState(false);
   const [cartItems, setcartItems] = useState([]);
+  const [storageItems, setstorageItems] = useState([]);
   const [totalPrice, settotalPrice] = useState(0);
   const [totalQuantity, settotalQuantity] = useState(0);
   const [qty, setqty] = useState(1);
@@ -36,6 +37,10 @@ export const StateContext = ({ children }) => {
 
       setcartItems([...cartItems, { ...product }]);
     }
+    const localstorage = localStorage.getItem("cart");
+    localStorage.setItem("cart", JSON.stringify(cartItems));
+    const localStorageCartItems = JSON.parse(localstorage);
+    setstorageItems(localStorageCartItems);
     toast.success(`${qty} ${product.name} added to cart.`);
   };
 
@@ -97,7 +102,7 @@ export const StateContext = ({ children }) => {
         totalQuantity,
         showCart,
         totalPrice,
-        cartItems,
+        storageItems,
         setcartItems,
         toggleCartQuantity,
         onRemove,

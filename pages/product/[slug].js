@@ -12,6 +12,9 @@ import { useStateContext } from "../../context/StateContext";
 const ProductDetails = ({ product, products }) => {
   const [index, setIndex] = useState(0);
   const { increaseQty, decreaseQty, qty, OnAdd } = useStateContext();
+  const filteredProducts = products.filter(
+    (item) => item.category == product[0].category
+  );
 
   return (
     <div>
@@ -64,6 +67,7 @@ const ProductDetails = ({ product, products }) => {
               </span>
             </p>
           </div>
+          {console.log(filteredProducts)}
           <div className="buttons">
             <button
               className="add-to-cart"
@@ -82,7 +86,7 @@ const ProductDetails = ({ product, products }) => {
         <h2>You may also like</h2>
         <div className="marquee">
           <div className="maylike-products-container track">
-            {products.map((item) => (
+            {filteredProducts.map((item) => (
               <Product key={item._id} product={item} />
             ))}
           </div>
@@ -116,11 +120,10 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async ({ params: { slug } }) => {
   const query = `*[_type == "product" && slug.current == '${slug}']`;
-  const productsQuery = '*[_type == "product"]';
-
   const product = await client.fetch(query);
-  const products = await client.fetch(productsQuery);
 
+  const productsQuery = `*[_type == "product"]`;
+  const products = await client.fetch(productsQuery);
   return {
     props: { products, product },
   };
