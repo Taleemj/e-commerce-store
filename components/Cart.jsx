@@ -10,17 +10,37 @@ import { TiDeleteOutline } from "react-icons/ti";
 import toast from "react-hot-toast";
 import { useStateContext } from "../context/StateContext";
 import { UrlFor } from "../lib/client";
+import getStripe from "../lib/getStripe";
 
 const Cart = () => {
   const cartref = useRef();
   const {
     totalPrice,
     totalQuantity,
-    storageItems,
+    cartItems,
     setShowCart,
     toggleCartQuantity,
     onRemove,
   } = useStateContext();
+
+  const handleCheckOut = async () => {
+    const stripe = await getStripe();
+
+    const response = await fetch("/api/stripe", {
+      method: "POST",
+      headers: {
+        "content-Type": "application/json",
+      },
+      body: JSON.stringify(cartItems),
+    });
+    if (response.statusCode === 500) return;
+
+    const data = await response.json();
+
+    toast.loading("redirecting...");
+
+    stripe.redirectToCheckout({ sessionId: data.id });
+  };
 
   return (
     <div className="cart-wrapper" ref={cartref}>
@@ -34,7 +54,7 @@ const Cart = () => {
           <span className="heading">Your Cart</span>
           <span className="cart-num-items">({totalQuantity})</span>
         </button>
-        {storageItems.length < 1 && (
+        {cartItems.length < 1 && (
           <div className="empty-cart">
             <AiOutlineShopping size={150} />
             <h3>Your Shopping bag is empty</h3>
@@ -51,9 +71,9 @@ const Cart = () => {
         )}
 
         <div className="product-container">
-          {storageItems.length >= 1 &&
-            storageItems.map((item, i) => (
-              <div className="product" key={item?.id}>
+          {cartItems.length >= 1 &&
+            cartItems.map((item, i) => (
+              <div className="product" key={i}>
                 <img
                   src={UrlFor(item?.image[0])}
                   className="cart-product-image"
@@ -94,14 +114,14 @@ const Cart = () => {
               </div>
             ))}
         </div>
-        {storageItems.length >= 1 && (
+        {cartItems.length >= 1 && (
           <div className="cart-bottom">
             <div className="total">
               <h3>SubTotal</h3>
               <h3>${totalPrice}</h3>
             </div>
             <div className="btn-container">
-              <button type="button" className="btn" onClick="">
+              <button type="button" className="btn" onClick={handleCheckOut}>
                 Pay With Stripe
               </button>
             </div>
