@@ -11,7 +11,8 @@ import { useStateContext } from "../../context/StateContext";
 
 const ProductDetails = ({ product, products }) => {
   const [index, setIndex] = useState(0);
-  const { increaseQty, decreaseQty, qty, OnAdd } = useStateContext();
+  const { increaseQty, decreaseQty, qty, OnAdd, setShowCart } =
+    useStateContext();
   const filteredProducts = products.filter(
     (item) => item.category == product[0].category
   );
@@ -67,7 +68,6 @@ const ProductDetails = ({ product, products }) => {
               </span>
             </p>
           </div>
-          {console.log(filteredProducts)}
           <div className="buttons">
             <button
               className="add-to-cart"
@@ -76,7 +76,14 @@ const ProductDetails = ({ product, products }) => {
             >
               Add to Cart
             </button>
-            <button className="buy-now" type="button">
+            <button
+              className="buy-now"
+              onClick={() => {
+                OnAdd(product[0], qty);
+                setShowCart(true);
+              }}
+              type="button"
+            >
               Buy Now
             </button>
           </div>
